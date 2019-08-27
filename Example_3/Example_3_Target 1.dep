@@ -1,0 +1,7 @@
+Dependencies for Project 'Example_3', Target 'Target 1': (DO NOT MODIFY !)
+F (.\startup_LPC17xx.s)(0x4BB1E52C)()
+F (.\Example3.c)(0x590B04B3)()
+F (.\LEDs.c)(0x4F3E24A4)()
+F (.\system_LPC17xx.c)(0x590AEB7E)()
+F (.\GLCD_SPI_LPC1700.c)(0x51C7F822)()
+F (.\ADC.c)(0x590B01D9)()

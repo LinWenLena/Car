@@ -1,0 +1,181 @@
+package codegenerator.test
+
+import org.junit.Test
+import org.eclipse.uml2.uml.UMLFactory
+import codegenerator.Uml2C
+import org.junit.Assert
+import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.eclipse.uml2.uml.VisibilityKind
+
+class TestOperation {
+
+	extension UMLFactory factory = UMLFactory.eINSTANCE
+
+	/**
+	 * 
+	 */
+	@Test def testSimpleOperation() {
+		val operation = createOperation => [
+			name = "simpleOperation"
+		]
+		createClass => [
+			name = "TestClass"
+			ownedOperations += operation
+		]
+
+		val code = (new Uml2C).generateCode(operation)
+
+		Assert.assertEquals("void simpleOperation(TestClass* const me);", code)
+	}
+
+	/**
+	 * 
+	 */
+	@Test def testReturningOperation() {
+		val operation = createOperation => [
+			name = "returningOperation"
+			ownedParameters += createParameter => [
+				name = "returning"
+				direction = ParameterDirectionKind.RETURN_LITERAL
+				type = createPrimitiveType => [name = "uint32"]
+			]
+		]
+		createClass => [
+			name = "TestClass"
+			ownedOperations += operation
+		]
+
+		val code = (new Uml2C).generateCode(operation)
+
+		Assert.assertEquals("uint32 returningOperation(TestClass* const me);", code)
+	}
+
+	/**
+	 * 
+	 */
+	@Test def testOneParameterOperation() {
+		val operation = createOperation => [
+			name = "oneParameterOperation"
+			ownedParameters += createParameter => [
+				name = "param1"
+				type = createPrimitiveType => [name = "uint32"]
+			]
+		]
+		createClass => [
+			name = "TestClass"
+			ownedOperations += operation
+		]
+
+		val code = (new Uml2C).generateCode(operation)
+
+		Assert.assertEquals("void oneParameterOperation(TestClass* const me, uint32 param1);", code)
+	}
+
+	/**
+	 * 
+	 */
+	@Test def testTwoParameterOperation() {
+		val operation = createOperation => [
+			name = "twoParameterOperation"
+			ownedParameters += createParameter => [
+				name = "param1"
+				type = createPrimitiveType => [name = "uint32"]
+			]
+			ownedParameters += createParameter => [
+				name = "param2"
+				type = createPrimitiveType => [name = "uint8"]
+			]
+		]
+		createClass => [
+			name = "TestClass"
+			ownedOperations += operation
+		]
+
+		val code = (new Uml2C).generateCode(operation)
+
+		Assert.assertEquals("void twoParameterOperation(TestClass* const me, uint32 param1, uint8 param2);", code)
+	}
+
+	/**
+	 * 
+	 */
+	@Test def testStaticOperation() {
+		val operation = createOperation => [
+			name = "staticOperation"
+			ownedParameters += createParameter => [
+				name = "param1"
+				type = createPrimitiveType => [name = "uint32"]
+			]
+		]
+		createClass => [
+			name = "TestClass"
+			ownedOperations += operation
+		]
+
+		val code = (new Uml2C).generateCode(operation)
+
+		Assert.assertEquals("void staticOperation(uint32 param1);", code)
+	}
+	
+	/**
+	 * 
+	 */
+	@Test def testPrivateOperation() {
+		val operation = createOperation => [
+			name = "privateOperation"
+			visibility = VisibilityKind.PRIVATE_LITERAL
+		]
+		createClass => [
+			name = "TestClass"
+			ownedOperations += operation
+		]
+
+		val code = (new Uml2C).generateCode(operation)
+
+		Assert.assertEquals("static void privateOperation(TestClass* const me);", code)
+	}
+
+	/**
+	 * 
+	 */
+	@Test def testQueryOperation() {
+		val operation = createOperation => [
+			name = "queryOperation"
+			isQuery = true
+		]
+		createClass => [
+			name = "TestClass"
+			ownedOperations += operation
+		]
+
+		val code = (new Uml2C).generateCode(operation)
+
+		Assert.assertEquals("void queryOperation(const TestClass* const me);", code)
+	}
+
+	/**
+	 * 
+	 */
+	@Test def testImplementedOperation() {
+		val operation = createOperation => [
+			name = "implementedOperation"
+			methods += createOpaqueBehavior => [
+				languages += "C"
+				bodies += "/* hier kaennte Ihre Werbung stehen */"
+			]
+		]
+		createClass => [
+			name = "TestClass"
+			ownedOperations += operation
+		]
+
+		val code = (new Uml2C).generateCode(operation)
+
+		Assert.assertEquals(
+			'''
+			void implementedOperation(TestClass* const me) {
+				/* hier kaennte Ihre Werbung stehen */
+			}
+		'''.toString, code)
+	}
+}

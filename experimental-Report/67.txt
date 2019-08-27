@@ -1,0 +1,145 @@
+package codegenerator.test
+
+import codegenerator.Uml2C
+import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.eclipse.uml2.uml.UMLFactory
+import org.junit.Assert
+import org.junit.Test
+import org.eclipse.uml2.uml.ParameterEffectKind
+
+class TestParameter {
+
+	extension UMLFactory factory = UMLFactory.eINSTANCE
+
+	/**
+	 * 
+	 */
+	@Test def testSimpleTypedParameter() {
+		val parameter = createParameter => [
+			name = "testParameter"
+			type = createPrimitiveType => [name = "uint32"]
+		]
+
+		val code = (new Uml2C).generateCode(parameter)
+
+		Assert.assertEquals("uint32 testParameter", code)
+	}
+
+	/**
+	 * 
+	 */
+	@Test def testUntypedParameter() {
+		val parameter = createParameter => [
+			name = "untypedParameter"
+		]
+
+		val code = (new Uml2C).generateCode(parameter)
+
+		Assert.assertEquals("void* untypedParameter", code)
+	}
+
+	/**
+	 * 
+	 */
+	@Test def testPrimitiveReturnParameter() {
+		val parameter = createParameter => [
+			name = "primitiveReturnParameter"
+			direction = ParameterDirectionKind.RETURN_LITERAL
+			type = createPrimitiveType => [name = "uint32"]
+		]
+
+		val code = (new Uml2C).generateCode(parameter)
+
+		Assert.assertEquals("uint32", code)
+	}
+
+	/**
+	 * 
+	 */
+	@Test def testComplexTypedParameter() {
+		val parameter = createParameter => [
+			name = "complexParameter"
+	
+			type = createClass => [name = "ComplexType"]
+		]
+
+		val code = (new Uml2C).generateCode(parameter)
+
+		Assert.assertEquals("ComplexType* complexParameter", code)
+	}
+
+	/**
+	 * 
+	 */
+	@Test def testComplexReturnParameter() {
+		val parameter = createParameter => [
+			name = "complexReturnParameter"
+			direction = ParameterDirectionKind.RETURN_LITERAL
+			type = createClass => [name = "ComplexType"]
+		]
+
+		val code = (new Uml2C).generateCode(parameter)
+
+		Assert.assertEquals("ComplexType*", code)
+	}
+
+	/**
+	 * 
+	 */
+	@Test def testPrimitiveInOutParameter() {
+		val parameter = createParameter => [
+			name = "primitiveInOutParameter"
+			direction = ParameterDirectionKind.INOUT_LITERAL
+			type = createPrimitiveType => [name = "uint32"]
+		]
+
+		val code = (new Uml2C).generateCode(parameter)
+
+		Assert.assertEquals("uint32* primitiveInOutParameter", code)
+	}
+
+	/**
+	 * 
+	 */
+	@Test def testComplexInOutParameter() {
+		val parameter = createParameter => [
+			name = "complexInOutParameter"
+			direction = ParameterDirectionKind.INOUT_LITERAL
+			type = createClass => [name = "ComplexType"]
+		]
+
+		val code = (new Uml2C).generateCode(parameter)
+
+		Assert.assertEquals("ComplexType* complexInOutParameter", code)
+	}
+
+	/**
+	 * 
+	 */
+	@Test def testComplexOutParameter() {
+		val parameter = createParameter => [
+			name = "complexOutParameter"
+			direction = ParameterDirectionKind.OUT_LITERAL
+			type = createClass => [name = "ComplexType"]
+		]
+
+		val code = (new Uml2C).generateCode(parameter)
+
+		Assert.assertEquals("ComplexType** complexOutParameter", code)
+	}
+
+	/**
+	 * 
+	 */
+	@Test def testReadParameter() {
+		val parameter = createParameter => [
+			name = "readParameter"
+			effect = ParameterEffectKind.READ_LITERAL
+			type = createClass => [name = "ComplexType"]
+		]
+
+		val code = (new Uml2C).generateCode(parameter)
+
+		Assert.assertEquals("ComplexType* const readParameter", code)
+	}
+}

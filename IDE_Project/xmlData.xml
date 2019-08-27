@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<DataModel application="Application" tool="Merapi">
+  <Target>
+    <Endianness>Little</Endianness>
+    <Alignment unit="Byte">4</Alignment>
+    <!--Type defines, size attribute is in bytes-->
+    <TypeList>
+      <Type size="1">signed char</Type>
+      <Type size="1">unsigned char</Type>
+      <Type size="1">char</Type>
+      <Type size="2">signed short</Type>
+      <Type size="2">unsigned short</Type>
+      <Type size="4">signed int</Type>
+      <Type size="4">unsigned int</Type>
+      <Type size="4">int</Type>
+      <Type size="4">float</Type>
+      <Type size="0">WST_FSM</Type>
+      <Type size="0">WST_TSK</Type>
+      <Type size="0">RiCCollection</Type>
+      <Type size="0">RiCList</Type>
+      <Type size="0">RiCMap</Type>
+      <Type size="1">uint8</Type>
+      <Type size="1">sint8</Type>
+      <Type size="2">uint16</Type>
+      <Type size="2">sint16</Type>
+      <Type size="4">uint32</Type>
+      <Type size="4">sint32</Type>
+      <Type size="1">WSTBoolean</Type>
+      <Type size="1">boolean</Type>
+      <Type size="8">double</Type>
+      <Type size="4">*</Type>
+    </TypeList>
+  </Target>
+  <EventList />
+  <HighWater>
+    <HighWaterList>
+      <CurrentAndMax>
+        <Name>tinyBuffersMax</Name>
+        <Type>uint16</Type>
+        <Max>0</Max>
+        <Visible>True</Visible>
+      </CurrentAndMax>
+      <CurrentAndMax>
+        <Name>smallBuffersMax</Name>
+        <Type>uint16</Type>
+        <Max>12</Max>
+        <Visible>True</Visible>
+      </CurrentAndMax>
+      <CurrentAndMax>
+        <Name>mediumBuffersMax</Name>
+        <Type>uint16</Type>
+        <Max>6</Max>
+        <Visible>True</Visible>
+      </CurrentAndMax>
+      <CurrentAndMax>
+        <Name>largeBuffersMax</Name>
+        <Type>uint16</Type>
+        <Max>1</Max>
+        <Visible>True</Visible>
+      </CurrentAndMax>
+      <CurrentAndMax>
+        <Name>hugeBuffersMax</Name>
+        <Type>uint16</Type>
+        <Max>0</Max>
+        <Visible>True</Visible>
+      </CurrentAndMax>
+      <CurrentAndMax>
+        <Name>timeoutsMax</Name>
+        <Type>uint16</Type>
+        <Max>32</Max>
+        <Visible>True</Visible>
+      </CurrentAndMax>
+      <Attribute>
+        <Name>bufferOverflow</Name>
+        <Type>WSTBoolean</Type>
+        <Visible>True</Visible>
+      </Attribute>
+    </HighWaterList>
+  </HighWater>
+  <Defines>
+    <Define name="EXAMPLE">1</Define>
+  </Defines>
+</DataModel>

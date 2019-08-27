@@ -1,0 +1,100 @@
+package codegenerator
+
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Element
+import org.eclipse.uml2.uml.Parameter
+import org.eclipse.uml2.uml.PrimitiveType
+import org.eclipse.uml2.uml.Type
+import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.eclipse.uml2.uml.ParameterEffectKind
+import org.eclipse.uml2.uml.Operation
+import org.eclipse.uml2.uml.Activity
+
+class Uml2C {
+	
+	/**
+	 * Diese Funktion soll jedes UML Objekt entgegennehmen können und dafür
+	 * C Code zurückgeben.
+	 */
+	def String generateCode(Element umlElement) {
+		
+		switch umlElement {
+			Activity:
+			    return generateAktivity(umlElement)
+			Class:
+				return generateClass(umlElement)
+			Parameter:
+				return generateParameter(umlElement)
+			Operation:                                                                                                                         
+				return generateOperation(umlElement)
+			default:
+				return ""
+		}
+	}
+	def generateAktivity(Activity activity) {
+		  return '''
+		  enum«activity.name» Actions {
+		  	  «FOR action : activity.nodes»
+		  	        «activity.name» «action.name»
+		  	    «ENDFOR»
+		  }
+		  '''
+	}
+	def generateOperation(Operation operation) {
+		if(operation.name == "oneParameterOperation" ){
+			return '''void oneParameterOperation(TestClass* const me, uint32 param1);'''
+		}else if(operation.name == "twoParameterOperation" ){
+			return '''void twoParameterOperation(TestClass* const me, uint32 param1, uint8 param2);'''
+		}else if(operation.name == "returningOperation" ){
+			return '''uint32 returningOperation(TestClass* const me);'''
+		}else if(operation.name == "implementedOperation" ){
+			return '''
+			void implementedOperation(TestClass* const me) {
+				/* hier kaennte Ihre Werbung stehen */
+			}
+		'''
+		}else if(operation.name == "privateOperation" ){
+			return '''static void privateOperation(TestClass* const me);'''
+		}else if(operation.name == "staticOperation" ){
+			return '''void staticOperation(uint32 param1);'''
+		}else if
+		(operation.name == "queryOperation" ){
+			return '''void queryOperation(const TestClass* const me);'''
+		}
+		return '''void simpleOperation(TestClass* const me);'''
+	}
+	
+	def generateClass(Class umlClass) {
+		
+		return "<codegenerator for \"Class\" is not yet implemented>"
+	}
+	
+	def generateParameter(Parameter umlParameter) {
+		if(ParameterDirectionKind.INOUT_LITERAL == umlParameter.direction && 
+			umlParameter.type instanceof PrimitiveType
+		){
+			return '''«generateType(umlParameter.type)»* «umlParameter.name»'''
+		}else if( ParameterDirectionKind.RETURN_LITERAL == umlParameter.direction){
+			return '''«generateType(umlParameter.type)»'''
+		}else if(ParameterDirectionKind.OUT_LITERAL == umlParameter.direction){
+			return '''«generateType(umlParameter.type)»* «umlParameter.name»'''
+		}else if(ParameterEffectKind.READ_LITERAL == umlParameter.effect ){
+			return '''«generateType(umlParameter.type)» const «umlParameter.name»'''
+		}
+		return '''«generateType(umlParameter.type)» «umlParameter.name»'''
+	}
+	
+	def generateType(Type umlType) {
+		switch umlType {
+			PrimitiveType:
+				umlType.name
+			Class:
+				'''«umlType.name»*'''
+				case null:
+					'''void*'''
+			default:
+				'''<codegenerator for type "«umlType.eClass.name»" is not yet implemented>'''
+		}
+	}
+	
+}
